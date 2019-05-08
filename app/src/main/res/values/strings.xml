@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Movie DB</string>
+    <string name="miPopularity">sort by popularity</string>
+    <string name="miRating">sort by rating</string>
+    <string name="titlePopular">Popular Movies</string>
+    <string name="titleRating">Top Rated Movies</string>
+    <string name="loadingMsg">Loading....</string>
+</resources>
