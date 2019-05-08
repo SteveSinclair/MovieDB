@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -25,25 +24,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
     private static final int SORT_BY_POPULARITY = 0;
     private static final int SORT_BY_RATING = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
-    private MovieAdapter adapter;
-    private RecyclerView recyclerView;
-    ProgressDialog progressDialog;
-    List<Movie> movies;
+    private MovieAdapter mMovieAdapter;
+    private RecyclerView mRecyclerView;
+    ProgressDialog mProgressDialog;
+    List<Movie> mMovies;
     Api api = RetrofitClientInstance.getRetrofitInstance().create(Api.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        refreshMovies(SORT_BY_POPULARITY);
+
+        mRecyclerView = findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+
+
+        loadMovies(SORT_BY_POPULARITY);
     }
 
-    private void refreshMovies(int sortBy) {
+    private void loadMovies(int sortBy) {
 
         Call<MoviesResponse> call;
         switch (sortBy) {
@@ -61,27 +67,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage(getString(R.string.loadingMsg));
-        progressDialog.show();
+        mProgressDialog = new ProgressDialog(MainActivity.this);
+        mProgressDialog.setMessage(getString(R.string.loadingMsg));
+        mProgressDialog.show();
 
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
 
-                progressDialog.dismiss();
+                mProgressDialog.dismiss();
                 MoviesResponse movieResponse = response.body();
 
 
-                movies = movieResponse.getMovies();
-                if (movies != null) {
-                    showMovies(movies);
+                mMovies = movieResponse.getMovies();
+                if (mMovies != null) {
+                    showMovies(mMovies);
                 }
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                progressDialog.dismiss();
+                mProgressDialog.dismiss();
                 Log.e(TAG, t.getMessage());
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -89,12 +95,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMovies(List<Movie> movies) {
-        recyclerView = findViewById(R.id.recyclerView);
-        adapter = new MovieAdapter(this, movies);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
+        mMovieAdapter = new MovieAdapter(this, movies, this);
+        mRecyclerView.setAdapter(mMovieAdapter);
 
     }
 
@@ -109,13 +111,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.itemByPopularity:
-                refreshMovies(SORT_BY_POPULARITY);
+                loadMovies(SORT_BY_POPULARITY);
                 return true;
             case R.id.itemByRating:
-                refreshMovies(SORT_BY_RATING);
+                loadMovies(SORT_BY_RATING);
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void OnClick(Movie movie) {
+        Log.d(TAG, "OnClick: " + movie.getTitle());
+        Toast.makeText(this,movie.getTitle(),Toast.LENGTH_LONG).show();
     }
 }
