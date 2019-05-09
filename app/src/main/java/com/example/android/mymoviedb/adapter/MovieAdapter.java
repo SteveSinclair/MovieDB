@@ -2,6 +2,8 @@ package com.example.android.mymoviedb.adapter;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +30,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private final MovieAdapterOnClickHandler mClickHandler;
 
     public interface MovieAdapterOnClickHandler{
-        void OnClick( Movie movie);
+        void OnClick( Movie movie, Bitmap poster);
     }
 
 
@@ -46,13 +48,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewPoster = itemView.findViewById(R.id.imageViewPoster);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
             Movie movie = mMovieList.get(adapterPosition);
-            mClickHandler.OnClick(movie);
+            Bitmap poster = ((BitmapDrawable) imageViewPoster.getDrawable()).getBitmap();
+            mClickHandler.OnClick(movie, poster);
         }
     }
 

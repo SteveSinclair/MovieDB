@@ -1,6 +1,9 @@
 package com.example.android.mymoviedb.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.mymoviedb.network.Api;
@@ -122,8 +126,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void OnClick(Movie movie) {
-        Log.d(TAG, "OnClick: " + movie.getTitle());
-        Toast.makeText(this,movie.getTitle(),Toast.LENGTH_LONG).show();
+    public void OnClick(Movie movie, Bitmap poster) {
+        Intent intent = new Intent(this, MovieDetails.class);
+        intent.putExtra("movie", movie);
+        intent.putExtra("bitmapPoster",poster);
+        startActivity(intent);
     }
 }
