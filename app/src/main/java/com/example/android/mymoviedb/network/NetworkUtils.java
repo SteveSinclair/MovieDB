@@ -6,8 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class NetworkUtils {
-    final static String imageSize = "w185";
-    final static String basePath = "https://image.tmdb.org/t/p/";
+    private final static String imageSize = "w185";
+    private final static String basePath = "https://image.tmdb.org/t/p/";
 
     public static URL buildImageUrl( String posterPath) {
         Uri builtUri = Uri.parse(basePath)

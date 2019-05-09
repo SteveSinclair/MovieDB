@@ -7,33 +7,33 @@ import java.util.ArrayList;
 
 public class Movie implements Serializable {
     @SerializedName("vote_count")
-    private Integer voteCount;
+    private final Integer voteCount;
     @SerializedName("id")
-    private Integer id;
+    private final Integer id;
     @SerializedName("video")
-    private Boolean video;
+    private final Boolean video;
     @SerializedName("vote_average")
-    private Double voteAverage;
+    private final Double voteAverage;
     @SerializedName("title")
-    private String title;
+    private final String title;
     @SerializedName("popularity")
-    private Double popularity;
+    private final Double popularity;
     @SerializedName("poster_path")
-    private String posterPath;
+    private final String posterPath;
     @SerializedName("original_language")
-    private String originalLanguage;
+    private final String originalLanguage;
     @SerializedName("original_title")
-    private String originalTitle;
+    private final String originalTitle;
     @SerializedName("genre_ids")
-    private ArrayList<Integer> genreIds;
+    private final ArrayList<Integer> genreIds;
     @SerializedName("backdrop_path")
-    private String backdropPath;
+    private final String backdropPath;
     @SerializedName("adult")
-    private Boolean adult;
+    private final Boolean adult;
     @SerializedName("overview")
-    private String overview;
+    private final String overview;
     @SerializedName("release_date")
-    private String releaseDate;
+    private final String releaseDate;
 
     public Movie(
             Integer voteCount,
@@ -45,7 +45,6 @@ public class Movie implements Serializable {
             String posterPath,
             String originalLanguage,
             String originalTitle,
-            ArrayList<Integer> genreIds,
             String backdropPath,
             Boolean adult,
             String overview,
@@ -59,7 +58,8 @@ public class Movie implements Serializable {
         this.posterPath = posterPath;
         this.originalLanguage = originalLanguage;
         this.originalTitle = originalTitle;
-        this.genreIds = genreIds = new ArrayList<Integer>();
+        ArrayList<Integer> genreIds;
+        this.genreIds = new ArrayList<>();
         this.backdropPath = backdropPath;
         this.adult = adult;
         this.overview = overview;

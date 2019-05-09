@@ -3,7 +3,6 @@ package com.example.android.mymoviedb.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.mymoviedb.network.Api;
@@ -33,11 +31,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final int SORT_BY_POPULARITY = 0;
     private static final int SORT_BY_RATING = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
-    private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
-    ProgressDialog mProgressDialog;
-    List<Movie> mMovies;
-    Api api = RetrofitClientInstance.getRetrofitInstance().create(Api.class);
+    private ProgressDialog mProgressDialog;
+    private List<Movie> mMovies;
+    private final Api api = RetrofitClientInstance.getRetrofitInstance().create(Api.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 MoviesResponse movieResponse = response.body();
 
 
-                mMovies = movieResponse.getMovies();
+                mMovies = movieResponse != null ? movieResponse.getMovies() : null;
                 if (mMovies != null) {
                     showMovies(mMovies);
                 }
@@ -99,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void showMovies(List<Movie> movies) {
-        mMovieAdapter = new MovieAdapter(this, movies, this);
+        MovieAdapter mMovieAdapter = new MovieAdapter(this, movies, this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
     }
